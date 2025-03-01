@@ -33,7 +33,14 @@ function loginizer_wp_authenticate($user, $username, $password)
             //exit;
         }
         return $user;
-    } else {
+    } else if ($result['error_description'] == 'NotActive') {
+        $Message = 'متاسفانه حساب کاربری شما هنوز فعال نشده است';
+        return new WP_Error('login_error', $Message);
+    } else if ($result['error_description'] == 'RequiresVerification') {
+        $Message = 'لطفا مراحل ثبت نام رو تکمیل کنید';
+        return new WP_Error('login_error', $Message);
+    }
+    else {
         $Message = 'نام کاربری یا رمزعبور اشتباه است';
         return new WP_Error('login_error', $Message);
     }
